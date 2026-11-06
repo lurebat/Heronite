@@ -204,9 +204,9 @@ impl Achievements {
             }
             return;
         }
-        let (paths, name) = (self.data_paths.clone(), app_name.to_string());
+        let (paths, name, prefs) = (self.data_paths.clone(), app_name.to_string(), self.prefs);
         cx.spawn(async move |this, cx| {
-            let Some(known) = cx.background_spawn(async move { find_game(&paths, &name) }).await else { return };
+            let Some(known) = cx.background_spawn(async move { find_game(&paths, &name, &prefs) }).await else { return };
             this.update(cx, |this, cx| {
                 let key = key_of(&known.runner, &known.app_name);
                 this.known.insert(known.app_name.clone(), known);
